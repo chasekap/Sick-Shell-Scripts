@@ -1,0 +1,20 @@
+#uses a hash table to count the number of commits from certain timezones in a git repo 
+#!/bin/bash
+declare -A commits
+
+grep -E "Date:" | grep -o -e '-[0-9][0-9][0-9][0-9]' > temp.txt
+while read d; do
+
+     ((commits[$d]++))
+
+done < temp.txt
+>temp.txt
+for KEY in "${!commits[@]}"; do
+    echo "$KEY" >> keys.txt
+done
+
+while read key; do
+    echo "$key ${commits[$key]}"
+done < keys.txt | sort
+> keys.txt
+
